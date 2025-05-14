@@ -42,7 +42,7 @@ public class User {
     @Column
     @NotBlank(message = "Pronouns is required")
     @Size(min = 1, max = 10, message = "Pronouns must have min 1 and max 10 characters")
-    @Pattern(regexp = "[a-zA-Z0-9_.-]+$", message = "Only letters and numbers are allowed")
+    @Pattern(regexp = "^[a-zA-Z0-9_.\\-/]+$", message = "Only letters, numbers, underscores, hyphens, dots, and slashes are allowed")
     private String pronouns;
 
     @Column
@@ -60,9 +60,17 @@ public class User {
     public User() {
     }
 
-    public User(int id, String name, String email, String password) {
-        this.id = id;
+    public User(String name, String email, String password) {
         this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String username, String name, String surname, String pronouns, String email, String password) {
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.pronouns = pronouns;
         this.email = email;
         this.password = password;
     }

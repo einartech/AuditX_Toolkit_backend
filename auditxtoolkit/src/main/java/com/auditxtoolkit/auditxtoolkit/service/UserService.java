@@ -43,13 +43,13 @@ public class UserService {
     }
 
     public User updateUser(Integer id, User user) {
-
         return userRepository.findById(id).map(existingUser -> {
-
+            existingUser.setUsername(user.getUsername());
             existingUser.setName(user.getName());
+            existingUser.setSurname(user.getSurname());
+            existingUser.setPronouns(user.getPronouns());
             existingUser.setEmail(user.getEmail());
             existingUser.setPassword(user.getPassword());
-
             return userRepository.save(existingUser);
         }).orElse(null);
     }

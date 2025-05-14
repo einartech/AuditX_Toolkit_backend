@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# No subir el archivo de variables de entorno
+.env
