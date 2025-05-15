@@ -21,9 +21,6 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
-
     private UserRequestDTO buildUserDTO(String username, String name, String surname, String pronouns, String email,
             String password) {
         UserRequestDTO dto = new UserRequestDTO();
