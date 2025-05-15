@@ -1,10 +1,9 @@
 package com.auditxtoolkit.auditxtoolkit.service;
 
 import com.auditxtoolkit.auditxtoolkit.repository.UserRepository;
-
-import org.springframework.stereotype.Service;
-
 import com.auditxtoolkit.auditxtoolkit.model.User;
+import com.auditxtoolkit.auditxtoolkit.exception.UserExceptions;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -14,7 +13,6 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-
     }
 
     public List<User> getAllUsers() {
@@ -22,23 +20,23 @@ public class UserService {
     }
 
     public User getUserById(Integer id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserExceptions.UserNotFoundException(id));
     }
 
     public User getUserByEmailAndPassword(String email, String password) {
-
         User userEmail = userRepository.findByEmail(email);
-        if (userEmail == null) {
-            return null;
-        } else if (userEmail.getPassword().equals(password)) {
-            return userEmail;
-        } else {
-            return null;
+        if (userEmail == null || !userEmail.getPassword().equals(password)) {
+            throw new UserExceptions.UserNotFoundException("User not found with provided email and password");
         }
+        return userEmail;
     }
 
     public User createUser(User user) {
-
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new UserExceptions.EmailAlreadyExistsException(user.getEmail());
+        }
+        // Puedes agregar más validaciones aquí si lo deseas
         return userRepository.save(user);
     }
 
@@ -51,10 +49,13 @@ public class UserService {
             existingUser.setEmail(user.getEmail());
             existingUser.setPassword(user.getPassword());
             return userRepository.save(existingUser);
-        }).orElse(null);
+        }).orElseThrow(() -> new UserExceptions.UserNotFoundException(id));
     }
 
     public void deleteUser(Integer id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserExceptions.UserNotFoundException(id);
+        }
         userRepository.deleteById(id);
     }
 }
