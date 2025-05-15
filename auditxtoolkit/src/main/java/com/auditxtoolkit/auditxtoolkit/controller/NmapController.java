@@ -3,7 +3,6 @@ package com.auditxtoolkit.auditxtoolkit.controller;
 import com.auditxtoolkit.auditxtoolkit.dto.NmapRequest;
 import com.auditxtoolkit.auditxtoolkit.dto.NmapResponse;
 import com.auditxtoolkit.auditxtoolkit.service.NmapService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
