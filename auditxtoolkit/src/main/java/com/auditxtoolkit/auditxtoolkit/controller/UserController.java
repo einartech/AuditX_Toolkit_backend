@@ -1,7 +1,7 @@
 package com.auditxtoolkit.auditxtoolkit.controller;
 
-import com.auditxtoolkit.auditxtoolkit.dto.UserRequestDTO;
-import com.auditxtoolkit.auditxtoolkit.dto.UserResponseDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.request.UserRequestDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.response.UserResponseDTO;
 import com.auditxtoolkit.auditxtoolkit.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

@@ -1,7 +1,8 @@
 package com.auditxtoolkit.auditxtoolkit.service;
 
-import com.auditxtoolkit.auditxtoolkit.dto.NmapRequest;
-import com.auditxtoolkit.auditxtoolkit.dto.NmapResponse;
+import com.auditxtoolkit.auditxtoolkit.dto.request.NmapRequestDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.response.NmapResponseDTO;
+
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -10,7 +11,7 @@ import java.io.InputStreamReader;
 @Service
 public class NmapService {
 
-    public NmapResponse runNmapScan(NmapRequest request) {
+    public NmapResponseDTO runNmapScan(NmapRequestDTO request) {
         StringBuilder output = new StringBuilder();
         int exitCode = -1;
         try {
@@ -37,6 +38,6 @@ public class NmapService {
         } catch (Exception e) {
             output.append("Error running nmap: ").append(e.getMessage());
         }
-        return new NmapResponse(output.toString(), exitCode);
+        return new NmapResponseDTO(output.toString(), exitCode);
     }
 }

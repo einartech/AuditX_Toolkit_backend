@@ -1,4 +1,4 @@
-package com.auditxtoolkit.auditxtoolkit.dto;
+package com.auditxtoolkit.auditxtoolkit.dto.request;
 
 import jakarta.validation.constraints.*;
 

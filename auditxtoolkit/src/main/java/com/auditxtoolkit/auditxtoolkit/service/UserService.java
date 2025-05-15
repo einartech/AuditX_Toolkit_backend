@@ -2,8 +2,8 @@ package com.auditxtoolkit.auditxtoolkit.service;
 
 import com.auditxtoolkit.auditxtoolkit.repository.UserRepository;
 import com.auditxtoolkit.auditxtoolkit.model.User;
-import com.auditxtoolkit.auditxtoolkit.dto.UserRequestDTO;
-import com.auditxtoolkit.auditxtoolkit.dto.UserResponseDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.request.UserRequestDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.response.UserResponseDTO;
 import com.auditxtoolkit.auditxtoolkit.exception.UserExceptions;
 import org.springframework.stereotype.Service;
 

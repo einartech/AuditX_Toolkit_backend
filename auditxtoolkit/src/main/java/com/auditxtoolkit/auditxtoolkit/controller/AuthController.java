@@ -1,8 +1,8 @@
 package com.auditxtoolkit.auditxtoolkit.controller;
 
-import com.auditxtoolkit.auditxtoolkit.dto.JwtResponseDTO;
-import com.auditxtoolkit.auditxtoolkit.dto.UserRequestDTO;
-import com.auditxtoolkit.auditxtoolkit.dto.UserResponseDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.request.UserRequestDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.response.JwtResponseDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.response.UserResponseDTO;
 import com.auditxtoolkit.auditxtoolkit.security.JwtUtil;
 import com.auditxtoolkit.auditxtoolkit.service.UserService;
 import org.springframework.http.ResponseEntity;

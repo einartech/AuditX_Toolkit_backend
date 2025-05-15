@@ -1,4 +1,4 @@
-package com.auditxtoolkit.auditxtoolkit.dto;
+package com.auditxtoolkit.auditxtoolkit.dto.response;
 
 public class UserResponseDTO {
     private Integer id;

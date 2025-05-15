@@ -1,13 +1,13 @@
-package com.auditxtoolkit.auditxtoolkit.dto;
+package com.auditxtoolkit.auditxtoolkit.dto.response;
 
-public class NmapResponse {
+public class NmapResponseDTO {
     private String output;
     private int exitCode;
 
-    public NmapResponse() {
+    public NmapResponseDTO() {
     }
 
-    public NmapResponse(String output, int exitCode) {
+    public NmapResponseDTO(String output, int exitCode) {
         this.output = output;
         this.exitCode = exitCode;
     }

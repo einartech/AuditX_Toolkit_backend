@@ -1,7 +1,7 @@
 package com.auditxtoolkit.auditxtoolkit.controller;
 
-import com.auditxtoolkit.auditxtoolkit.dto.NmapRequest;
-import com.auditxtoolkit.auditxtoolkit.dto.NmapResponse;
+import com.auditxtoolkit.auditxtoolkit.dto.request.NmapRequestDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.response.NmapResponseDTO;
 import com.auditxtoolkit.auditxtoolkit.service.NmapService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +17,9 @@ public class NmapController {
     }
 
     @PostMapping("/scan")
-    public ResponseEntity<NmapResponse> scan(@RequestBody NmapRequest request) {
+    public ResponseEntity<NmapResponseDTO> scan(@RequestBody NmapRequestDTO request) {
         // Aquí podrías agregar validaciones adicionales de seguridad
-        NmapResponse response = nmapService.runNmapScan(request);
+        NmapResponseDTO response = nmapService.runNmapScan(request);
         return ResponseEntity.ok(response);
     }
 }

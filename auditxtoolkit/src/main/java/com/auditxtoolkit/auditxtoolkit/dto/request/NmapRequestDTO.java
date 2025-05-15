@@ -1,13 +1,13 @@
-package com.auditxtoolkit.auditxtoolkit.dto;
+package com.auditxtoolkit.auditxtoolkit.dto.request;
 
-public class NmapRequest {
+public class NmapRequestDTO {
     private String target;
     private String flags;
 
-    public NmapRequest() {
+    public NmapRequestDTO() {
     }
 
-    public NmapRequest(String target, String flags) {
+    public NmapRequestDTO(String target, String flags) {
         this.target = target;
         this.flags = flags;
     }
