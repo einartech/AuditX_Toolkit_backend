@@ -2,11 +2,16 @@ package com.auditxtoolkit.auditxtoolkit.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserExceptions.UserNotFoundException.class)
@@ -41,17 +46,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        StringBuilder sb = new StringBuilder("Validation errors:\n");
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            sb.append("- Field '")
-                    .append(error.getField())
-                    .append("': ")
-                    .append(error.getDefaultMessage())
-                    .append(" (rejected value: ")
-                    .append(error.getRejectedValue())
-                    .append(")\n");
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(sb.toString());
+    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> "Field '" + error.getField() + "': " + error.getDefaultMessage() +
+                        " (rejected value: " + error.getRejectedValue() + ")")
+                .collect(Collectors.toList());
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", "Validation errors");
+        body.put("errors", errors);
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }
