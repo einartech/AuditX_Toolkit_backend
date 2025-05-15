@@ -2,10 +2,13 @@ package com.auditxtoolkit.auditxtoolkit.service;
 
 import com.auditxtoolkit.auditxtoolkit.repository.UserRepository;
 import com.auditxtoolkit.auditxtoolkit.model.User;
+import com.auditxtoolkit.auditxtoolkit.dto.UserRequestDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.UserResponseDTO;
 import com.auditxtoolkit.auditxtoolkit.exception.UserExceptions;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -15,40 +18,45 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponseDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
-    public User getUserById(Integer id) {
-        return userRepository.findById(id)
+    public UserResponseDTO getUserById(Integer id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserExceptions.UserNotFoundException(id));
+        return toResponseDTO(user);
     }
 
-    public User getUserByEmailAndPassword(String email, String password) {
+    public UserResponseDTO getUserByEmailAndPassword(String email, String password) {
         User userEmail = userRepository.findByEmail(email);
         if (userEmail == null || !userEmail.getPassword().equals(password)) {
             throw new UserExceptions.UserNotFoundException("User not found with provided email and password");
         }
-        return userEmail;
+        return toResponseDTO(userEmail);
     }
 
-    public User createUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()) != null) {
-            throw new UserExceptions.EmailAlreadyExistsException(user.getEmail());
+    public UserResponseDTO createUser(UserRequestDTO dto) {
+        if (userRepository.findByEmail(dto.getEmail()) != null) {
+            throw new UserExceptions.EmailAlreadyExistsException(dto.getEmail());
         }
-        // Puedes agregar más validaciones aquí si lo deseas
-        return userRepository.save(user);
+        User user = toEntity(dto);
+        User saved = userRepository.save(user);
+        return toResponseDTO(saved);
     }
 
-    public User updateUser(Integer id, User user) {
+    public UserResponseDTO updateUser(Integer id, UserRequestDTO dto) {
         return userRepository.findById(id).map(existingUser -> {
-            existingUser.setUsername(user.getUsername());
-            existingUser.setName(user.getName());
-            existingUser.setSurname(user.getSurname());
-            existingUser.setPronouns(user.getPronouns());
-            existingUser.setEmail(user.getEmail());
-            existingUser.setPassword(user.getPassword());
-            return userRepository.save(existingUser);
+            existingUser.setUsername(dto.getUsername());
+            existingUser.setName(dto.getName());
+            existingUser.setSurname(dto.getSurname());
+            existingUser.setPronouns(dto.getPronouns());
+            existingUser.setEmail(dto.getEmail());
+            existingUser.setPassword(dto.getPassword());
+            User updated = userRepository.save(existingUser);
+            return toResponseDTO(updated);
         }).orElseThrow(() -> new UserExceptions.UserNotFoundException(id));
     }
 
@@ -57,5 +65,28 @@ public class UserService {
             throw new UserExceptions.UserNotFoundException(id);
         }
         userRepository.deleteById(id);
+    }
+
+    // Mapper methods
+    private UserResponseDTO toResponseDTO(User user) {
+        UserResponseDTO dto = new UserResponseDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setName(user.getName());
+        dto.setSurname(user.getSurname());
+        dto.setPronouns(user.getPronouns());
+        dto.setEmail(user.getEmail());
+        return dto;
+    }
+
+    private User toEntity(UserRequestDTO dto) {
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setName(dto.getName());
+        user.setSurname(dto.getSurname());
+        user.setPronouns(dto.getPronouns());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        return user;
     }
 }

@@ -1,13 +1,13 @@
 package com.auditxtoolkit.auditxtoolkit.controller;
 
+import com.auditxtoolkit.auditxtoolkit.dto.UserRequestDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.UserResponseDTO;
+import com.auditxtoolkit.auditxtoolkit.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.auditxtoolkit.auditxtoolkit.service.UserService;
-import com.auditxtoolkit.auditxtoolkit.model.User;
-
-import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,45 +22,35 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<UserResponseDTO> addUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+        UserResponseDTO createdUser = userService.createUser(userRequestDTO);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<UserResponseDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-        User user = userService.getUserById(id);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Integer id) {
+        UserResponseDTO user = userService.getUserById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/login")
-    public ResponseEntity<User> getUserByEmailAndPassword(@RequestParam String email, @RequestParam String password) {
-        User user = userService.getUserByEmailAndPassword(email, password);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<UserResponseDTO> getUserByEmailAndPassword(@RequestParam String email,
+            @RequestParam String password) {
+        UserResponseDTO user = userService.getUserByEmailAndPassword(email, password);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Integer id, @Valid @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
-        if (updatedUser != null) {
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Integer id,
+            @Valid @RequestBody UserRequestDTO userRequestDTO) {
+        UserResponseDTO updatedUser = userService.updateUser(id, userRequestDTO);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.auditxtoolkit.auditxtoolkit.service;
 
-import com.auditxtoolkit.auditxtoolkit.model.User;
+import com.auditxtoolkit.auditxtoolkit.dto.UserRequestDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.UserResponseDTO;
 import com.auditxtoolkit.auditxtoolkit.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,45 +24,65 @@ public class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    private UserRequestDTO buildUserDTO(String username, String name, String surname, String pronouns, String email,
+            String password) {
+        UserRequestDTO dto = new UserRequestDTO();
+        dto.setUsername(username);
+        dto.setName(name);
+        dto.setSurname(surname);
+        dto.setPronouns(pronouns);
+        dto.setEmail(email);
+        dto.setPassword(password);
+        return dto;
+    }
+
     @Test
     void testCreateAndGetUser() {
-        User user = new User("testuser", "Test", "User", "he/him", "test@example.com", "Password123!");
-        userService.createUser(user);
+        UserRequestDTO dto = buildUserDTO("jdoe", "John", "Doe", "he/him", "john.doe@example.com", "Password123!");
+        userService.createUser(dto);
 
-        List<User> users = userService.getAllUsers();
+        List<UserResponseDTO> users = userService.getAllUsers();
         assertThat(users).hasSize(1);
-        assertThat(users.get(0).getEmail()).isEqualTo("test@example.com");
+        assertThat(users.get(0).getEmail()).isEqualTo("john.doe@example.com");
     }
 
     @Test
     void testGetUserById() {
-        User user = new User("testuser2", "Test2", "User2", "she/her", "test2@example.com", "Password123!");
-        User saved = userService.createUser(user);
+        UserRequestDTO dto = buildUserDTO("asmith", "Alice", "Smith", "she/her", "alice.smith@example.com",
+                "Password123!");
+        UserResponseDTO saved = userService.createUser(dto);
 
-        User found = userService.getUserById(saved.getId());
+        UserResponseDTO found = userService.getUserById(saved.getId());
         assertThat(found).isNotNull();
-        assertThat(found.getUsername()).isEqualTo("testuser2");
+        assertThat(found.getUsername()).isEqualTo("asmith");
     }
 
     @Test
     void testUpdateUser() {
-        User user = new User("testuser3", "Test3", "User3", "they/them", "test3@example.com", "Password123!");
-        User saved = userService.createUser(user);
+        UserRequestDTO dto = buildUserDTO("bwayne", "Bruce", "Wayne", "he/him", "bruce.wayne@example.com",
+                "Password123!");
+        UserResponseDTO saved = userService.createUser(dto);
 
-        saved.setName("UpdatedName");
-        userService.updateUser(saved.getId(), saved);
+        UserRequestDTO updateDto = buildUserDTO("bwayne", "Batman", "Wayne", "he/him", "bruce.wayne@example.com",
+                "Password123!");
+        UserResponseDTO updated = userService.updateUser(saved.getId(), updateDto);
 
-        User updated = userService.getUserById(saved.getId());
-        assertThat(updated.getName()).isEqualTo("UpdatedName");
+        assertThat(updated.getName()).isEqualTo("Batman");
     }
 
     @Test
     void testDeleteUser() {
-        User user = new User("testuser4", "Test4", "User4", "he/him", "test4@example.com", "Password123!");
-        User saved = userService.createUser(user);
+        UserRequestDTO dto = buildUserDTO("ckent", "Clark", "Kent", "he/him", "clark.kent@example.com", "Password123!");
+        UserResponseDTO saved = userService.createUser(dto);
 
         userService.deleteUser(saved.getId());
-        User deleted = userService.getUserById(saved.getId());
-        assertThat(deleted).isNull();
+        // Verifica que lanzar excepción al buscar usuario borrado
+        try {
+            userService.getUserById(saved.getId());
+            assertThat(true).isFalse(); // Debe lanzar excepción
+        } catch (Exception e) {
+            assertThat(e)
+                    .isInstanceOf(com.auditxtoolkit.auditxtoolkit.exception.UserExceptions.UserNotFoundException.class);
+        }
     }
 }
