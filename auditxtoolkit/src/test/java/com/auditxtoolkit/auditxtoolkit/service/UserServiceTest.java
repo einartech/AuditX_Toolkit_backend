@@ -2,7 +2,6 @@ package com.auditxtoolkit.auditxtoolkit.service;
 
 import com.auditxtoolkit.auditxtoolkit.dto.UserRequestDTO;
 import com.auditxtoolkit.auditxtoolkit.dto.UserResponseDTO;
-import com.auditxtoolkit.auditxtoolkit.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
