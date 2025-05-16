@@ -1,7 +1,7 @@
 package com.auditxtoolkit.auditxtoolkit.controller;
 
 import com.auditxtoolkit.auditxtoolkit.dto.request.UserRequestDTO;
-import com.auditxtoolkit.auditxtoolkit.dto.response.JwtResponseDTO;
+import com.auditxtoolkit.auditxtoolkit.dto.response.JwtLoginResponseDTO;
 import com.auditxtoolkit.auditxtoolkit.dto.response.UserResponseDTO;
 import com.auditxtoolkit.auditxtoolkit.security.JwtUtil;
 import com.auditxtoolkit.auditxtoolkit.service.UserService;
@@ -21,10 +21,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseDTO> login(@RequestBody UserRequestDTO loginRequest) {
+    public ResponseEntity<JwtLoginResponseDTO> login(@RequestBody UserRequestDTO loginRequest) {
         UserResponseDTO user = userService.getUserByEmailAndPassword(
                 loginRequest.getEmail(), loginRequest.getPassword());
         String token = jwtUtil.generateToken(user.getUsername());
-        return ResponseEntity.ok(new JwtResponseDTO(token));
+        return ResponseEntity.ok(new JwtLoginResponseDTO(token, user));
     }
 }
