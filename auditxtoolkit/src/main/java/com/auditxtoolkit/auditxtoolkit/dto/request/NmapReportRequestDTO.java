@@ -2,16 +2,12 @@ package com.auditxtoolkit.auditxtoolkit.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 public class NmapReportRequestDTO {
     @NotBlank
-    @Size(max = 255)
     private String command;
-
     @NotBlank
     private String output;
-
     @NotNull
     private Integer exitCode;
 

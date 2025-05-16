@@ -33,4 +33,8 @@ public class NmapReportService {
     public void deleteReport(Long id) {
         nmapReportRepository.deleteById(id);
     }
+
+    public List<NmapReport> getReportsByUserId(Integer userId) {
+        return nmapReportRepository.findByUserId(userId);
+    }
 }

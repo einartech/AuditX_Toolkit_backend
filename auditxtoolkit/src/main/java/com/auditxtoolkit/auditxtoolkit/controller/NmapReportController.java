@@ -1,12 +1,14 @@
 package com.auditxtoolkit.auditxtoolkit.controller;
 
-import com.auditxtoolkit.auditxtoolkit.model.NmapReport;
-import com.auditxtoolkit.auditxtoolkit.service.NmapReportService;
 import com.auditxtoolkit.auditxtoolkit.dto.request.NmapReportRequestDTO;
+import com.auditxtoolkit.auditxtoolkit.model.NmapReport;
+import com.auditxtoolkit.auditxtoolkit.model.User;
+import com.auditxtoolkit.auditxtoolkit.service.NmapReportService;
+import com.auditxtoolkit.auditxtoolkit.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -14,9 +16,11 @@ import java.util.List;
 public class NmapReportController {
 
     private final NmapReportService nmapReportService;
+    private final UserService userService;
 
-    public NmapReportController(NmapReportService nmapReportService) {
+    public NmapReportController(NmapReportService nmapReportService, UserService userService) {
         this.nmapReportService = nmapReportService;
+        this.userService = userService;
     }
 
     @PostMapping
@@ -48,4 +52,31 @@ public class NmapReportController {
         nmapReportService.deleteReport(id);
         return ResponseEntity.noContent().build();
     }
+
+    // Crear un reporte para un usuario específico
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<NmapReport> saveReportForUser(
+            @PathVariable Integer userId,
+            @Valid @RequestBody NmapReportRequestDTO dto) {
+        User user = userService.getUserEntityById(userId); // Método que retorna la entidad User o lanza excepción si no
+                                                           // existe
+        NmapReport report = new NmapReport();
+        report.setCommand(dto.getCommand());
+        report.setOutput(dto.getOutput());
+        report.setExitCode(dto.getExitCode());
+        report.setCreatedAt(java.time.LocalDateTime.now());
+        report.setUser(user);
+
+        NmapReport saved = nmapReportService.saveReport(report);
+        return ResponseEntity.ok(saved);
+    }
+
+    // Obtener todos los reportes de un usuario
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<NmapReport>> getReportsByUser(@PathVariable Integer userId) {
+        List<NmapReport> reports = nmapReportService.getReportsByUserId(userId);
+        return ResponseEntity.ok(reports);
+    }
+
+    // ...otros endpoints CRUD...
 }

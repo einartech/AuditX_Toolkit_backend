@@ -67,6 +67,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public User getUserEntityById(Integer userId) {
+        // Example implementation, adjust as needed
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+    }
+
     // Mapper methods
     private UserResponseDTO toResponseDTO(User user) {
         UserResponseDTO dto = new UserResponseDTO();
