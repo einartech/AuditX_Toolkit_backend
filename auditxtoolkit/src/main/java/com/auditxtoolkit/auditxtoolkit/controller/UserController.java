@@ -3,6 +3,7 @@ package com.auditxtoolkit.auditxtoolkit.controller;
 import com.auditxtoolkit.auditxtoolkit.dto.request.UserRequestDTO;
 import com.auditxtoolkit.auditxtoolkit.dto.response.UserResponseDTO;
 import com.auditxtoolkit.auditxtoolkit.service.UserService;
+import com.auditxtoolkit.auditxtoolkit.mapper.UserMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> addUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-        UserResponseDTO createdUser = userService.createUser(userRequestDTO);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userRequest) {
+        UserResponseDTO savedUser = userService.createUser(userRequest);
+        return ResponseEntity.ok(savedUser);
     }
 
     @GetMapping

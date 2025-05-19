@@ -5,6 +5,7 @@ import com.auditxtoolkit.auditxtoolkit.model.User;
 import com.auditxtoolkit.auditxtoolkit.dto.request.UserRequestDTO;
 import com.auditxtoolkit.auditxtoolkit.dto.response.UserResponseDTO;
 import com.auditxtoolkit.auditxtoolkit.exception.UserExceptions;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserResponseDTO> getAllUsers() {
@@ -43,6 +46,7 @@ public class UserService {
             throw new UserExceptions.EmailAlreadyExistsException(dto.getEmail());
         }
         User user = toEntity(dto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User saved = userRepository.save(user);
         return toResponseDTO(saved);
     }
@@ -70,7 +74,7 @@ public class UserService {
     public User getUserEntityById(Integer userId) {
         // Example implementation, adjust as needed
         return userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
     }
 
     // Mapper methods
