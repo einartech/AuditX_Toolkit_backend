@@ -60,4 +60,15 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NmapReportExceptions.NmapReportNotFoundException.class)
+    public ResponseEntity<String> handleNmapReportNotFound(NmapReportExceptions.NmapReportNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NmapReportExceptions.NmapReportAlreadyExistsException.class)
+    public ResponseEntity<String> handleNmapReportAlreadyExists(
+            NmapReportExceptions.NmapReportAlreadyExistsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
 }
