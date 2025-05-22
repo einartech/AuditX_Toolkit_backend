@@ -1,5 +1,6 @@
 package com.auditxtoolkit.auditxtoolkit.service;
 
+import com.auditxtoolkit.auditxtoolkit.exception.NmapReportExceptions;
 import com.auditxtoolkit.auditxtoolkit.model.NmapReport;
 import com.auditxtoolkit.auditxtoolkit.repository.NmapReportRepository;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,15 @@ public class NmapReportService {
     }
 
     public Optional<NmapReport> getReportById(Long id) {
-        return nmapReportRepository.findById(id);
+        return Optional.ofNullable(
+                nmapReportRepository.findById(id)
+                        .orElseThrow(() -> new NmapReportExceptions.NmapReportNotFoundException(id)));
     }
 
     public void deleteReport(Long id) {
+        if (!nmapReportRepository.existsById(id)) {
+            throw new NmapReportExceptions.NmapReportNotFoundException(id);
+        }
         nmapReportRepository.deleteById(id);
     }
 
