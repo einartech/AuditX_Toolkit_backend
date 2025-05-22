@@ -22,25 +22,21 @@ public class NmapService {
         int exitCode = -1;
         String commandString = "";
 
-        // Validación básica de target
         if (request.getTarget() == null || !IP_OR_HOST_PATTERN.matcher(request.getTarget()).matches()) {
             throw new NmapExceptions.InvalidTargetException(
                     "Invalid target: Only IP addresses or hostnames are allowed.");
         }
 
         try {
-            // Sanitiza flags (solo permite flags seguros, puedes mejorar esta lista)
             String[] flags = request.getFlags() != null && !request.getFlags().isEmpty()
                     ? request.getFlags().split("\\s+")
                     : new String[0];
 
-            // Construye el comando
             String[] command = new String[flags.length + 2];
             command[0] = "nmap";
             System.arraycopy(flags, 0, command, 1, flags.length);
             command[flags.length + 1] = request.getTarget();
 
-            // Guarda el comando como string para devolverlo
             commandString = String.join(" ", command);
 
             logger.info("Executing Nmap command: {}", commandString);

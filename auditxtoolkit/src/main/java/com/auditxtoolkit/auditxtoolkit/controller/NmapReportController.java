@@ -29,7 +29,6 @@ public class NmapReportController {
         report.setCommand(dto.getCommand());
         report.setOutput(dto.getOutput());
         report.setExitCode(dto.getExitCode());
-        // createdAt se setea en el servicio
 
         NmapReport saved = nmapReportService.saveReport(report);
         return ResponseEntity.ok(saved);
@@ -53,13 +52,11 @@ public class NmapReportController {
         return ResponseEntity.noContent().build();
     }
 
-    // Crear un reporte para un usuario específico
     @PostMapping("/user/{userId}")
     public ResponseEntity<NmapReport> saveReportForUser(
             @PathVariable Integer userId,
             @Valid @RequestBody NmapReportRequestDTO dto) {
-        User user = userService.getUserEntityById(userId); // Método que retorna la entidad User o lanza excepción si no
-                                                           // existe
+        User user = userService.getUserEntityById(userId);
         NmapReport report = new NmapReport();
         report.setCommand(dto.getCommand());
         report.setOutput(dto.getOutput());
@@ -71,12 +68,10 @@ public class NmapReportController {
         return ResponseEntity.ok(saved);
     }
 
-    // Obtener todos los reportes de un usuario
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<NmapReport>> getReportsByUser(@PathVariable Integer userId) {
         List<NmapReport> reports = nmapReportService.getReportsByUserId(userId);
         return ResponseEntity.ok(reports);
     }
 
-    // ...otros endpoints CRUD...
 }

@@ -18,5 +18,4 @@ public class NmapReportExceptions {
         }
     }
 
-    // Puedes agregar más excepciones específicas si lo necesitas
 }

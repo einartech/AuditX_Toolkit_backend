@@ -30,6 +30,6 @@ public class NmapReport {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference // <-- Aquí
+    @JsonBackReference
     private User user;
 }

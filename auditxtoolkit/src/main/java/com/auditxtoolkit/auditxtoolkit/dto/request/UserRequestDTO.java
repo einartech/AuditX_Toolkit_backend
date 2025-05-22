@@ -17,7 +17,6 @@ public class UserRequestDTO {
     @NotBlank
     private String password;
 
-    // Getters and setters
     public String getUsername() {
         return username;
     }

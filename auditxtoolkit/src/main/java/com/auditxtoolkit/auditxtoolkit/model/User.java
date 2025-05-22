@@ -58,10 +58,9 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // <-- Aquí
+    @JsonManagedReference
     private List<NmapReport> reports = new ArrayList<>();
 
-    // Puedes agregar constructores personalizados si lo necesitas
     public User(String username, String name, String surname, String pronouns, String email, String password) {
         this.username = username;
         this.name = name;

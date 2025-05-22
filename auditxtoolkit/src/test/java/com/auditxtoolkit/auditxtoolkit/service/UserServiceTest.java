@@ -73,10 +73,9 @@ public class UserServiceTest {
         UserResponseDTO saved = userService.createUser(dto);
 
         userService.deleteUser(saved.getId());
-        // Verifica que lanzar excepción al buscar usuario borrado
         try {
             userService.getUserById(saved.getId());
-            assertThat(true).isFalse(); // Debe lanzar excepción
+            assertThat(true).isFalse();
         } catch (Exception e) {
             assertThat(e)
                     .isInstanceOf(com.auditxtoolkit.auditxtoolkit.exception.UserExceptions.UserNotFoundException.class);

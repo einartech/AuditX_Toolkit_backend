@@ -8,7 +8,6 @@ public class UserResponseDTO {
     private String pronouns;
     private String email;
 
-    // Getters and setters
     public Integer getId() {
         return id;
     }

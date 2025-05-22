@@ -18,7 +18,6 @@ public class NmapController {
 
     @PostMapping("/scan")
     public ResponseEntity<NmapResponseDTO> scan(@RequestBody NmapRequestDTO request) {
-        // Aquí podrías agregar validaciones adicionales de seguridad
         NmapResponseDTO response = nmapService.runNmapScan(request);
         return ResponseEntity.ok(response);
     }
