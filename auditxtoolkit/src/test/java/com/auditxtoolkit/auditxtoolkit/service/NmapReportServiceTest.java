@@ -5,9 +5,6 @@ import com.auditxtoolkit.auditxtoolkit.model.NmapReport;
 import com.auditxtoolkit.auditxtoolkit.repository.NmapReportRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

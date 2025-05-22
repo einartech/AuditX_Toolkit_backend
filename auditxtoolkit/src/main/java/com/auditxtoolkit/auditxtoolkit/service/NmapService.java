@@ -2,6 +2,7 @@ package com.auditxtoolkit.auditxtoolkit.service;
 
 import com.auditxtoolkit.auditxtoolkit.dto.request.NmapRequestDTO;
 import com.auditxtoolkit.auditxtoolkit.dto.response.NmapResponseDTO;
+import com.auditxtoolkit.auditxtoolkit.exception.NmapExceptions;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +24,8 @@ public class NmapService {
 
         // Validación básica de target
         if (request.getTarget() == null || !IP_OR_HOST_PATTERN.matcher(request.getTarget()).matches()) {
-            return new NmapResponseDTO(
-                    "",
-                    "Invalid target: Only IP addresses or hostnames are allowed.",
-                    1);
+            throw new NmapExceptions.InvalidTargetException(
+                    "Invalid target: Only IP addresses or hostnames are allowed.");
         }
 
         try {
@@ -59,7 +58,7 @@ public class NmapService {
             exitCode = process.waitFor();
         } catch (Exception e) {
             logger.error("Error running nmap", e);
-            output.append("Error running nmap: ").append(e.getMessage());
+            throw new NmapExceptions.NmapExecutionException("Error running nmap: " + e.getMessage(), e);
         }
         return new NmapResponseDTO(commandString, output.toString(), exitCode);
     }

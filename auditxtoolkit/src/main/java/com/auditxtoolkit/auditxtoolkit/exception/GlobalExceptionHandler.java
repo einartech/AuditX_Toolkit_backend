@@ -71,4 +71,14 @@ public class GlobalExceptionHandler {
             NmapReportExceptions.NmapReportAlreadyExistsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(NmapExceptions.InvalidTargetException.class)
+    public ResponseEntity<String> handleInvalidTarget(NmapExceptions.InvalidTargetException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NmapExceptions.NmapExecutionException.class)
+    public ResponseEntity<String> handleNmapExecution(NmapExceptions.NmapExecutionException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
